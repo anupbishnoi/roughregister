@@ -3,10 +3,11 @@ var name;
 
 socket.on("connect", function () {
 	name = "";
-	bootbox.hideAll();
+	/*bootbox.hideAll();
     bootbox.prompt("Enter your name", function (name) {
     	socket.emit("identification", { type: "player", name: name });
-    });
+    });*/
+	socket.emit("identification", { type: "player", name: prompt("Enter your name:") });
 });
 
 socket.on("authorized", function (name) {
@@ -107,6 +108,7 @@ $(".tile")
 	.on("click", voteTap);
 
 function voteTap() {
+	$(this).css("background", "grey");
 	vote($(this).data("vote"));
 };
 
