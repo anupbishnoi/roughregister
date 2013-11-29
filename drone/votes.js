@@ -7,12 +7,9 @@ votes.__proto__ = EventEmitter.prototype;
 var winners = [];
 
 var rounds = [
-        {
-            flipLeft: [],
-            flipRight: []
-        }
+        {}
     ],
-    defaultAnimation = "flipLeft";
+    defaultAnimation = "wave";
 
 rounds.last = function () { return rounds[rounds.length - 1]; };
 
@@ -100,7 +97,7 @@ votes.on("increment", function (animation, voter, callback) {
 
 votes.on("start", function () {
     clearInterval(votes.intervalId);
-    votes.intervalId = setInterval(roundAndRound, 5000);
+    votes.intervalId = setInterval(roundAndRound, 30000);
 });
 votes.on("stop", function () {
     clearInterval(votes.intervalId);
