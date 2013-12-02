@@ -97,7 +97,7 @@ votes.on("increment", function (animation, voter, callback) {
 
 votes.on("start", function () {
     clearInterval(votes.intervalId);
-    votes.intervalId = setInterval(roundAndRound, 30000);
+    votes.intervalId = setInterval(roundAndRound, 15000);
 });
 votes.on("stop", function () {
     clearInterval(votes.intervalId);
