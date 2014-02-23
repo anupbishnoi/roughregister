@@ -1,9 +1,3 @@
-var app = require("apper")(__dirname);
+var app = require("apper")();
 
-if (app.init()) {
-    app.start(process.env.PORT || 3000);
-}
-
-process.on("uncaughtException", function (error) {
-    console.log(error.stack);
-});
+app.init() && app.start();

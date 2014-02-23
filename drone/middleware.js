@@ -1,10 +1,6 @@
 var socketSetup = require("./sockets");
 
-module.exports = function (app, mountPath) {
-
+module.exports = function (app) {
     app.use(app.express.bodyParser());
-
-    app.mountPath = app.mountPath || mountPath;
     socketSetup(app);
-
 };
