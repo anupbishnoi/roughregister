@@ -27,8 +27,8 @@ By Anup Bishnoi (anupbishnoi@gmail.com)
         log("Seating Plan: " + (JSON.stringify(seating_plan)));
         log("Graphic Settings: " + (JSON.stringify(settings)));
         center = seating_plan.center.trim().replace(/\s+/g, "_");
-        plan_path = "" + output_folder + "/SeatingPlan " + seating_plan.studying_in + " " + center + ".pdf";
-        stickers_path = "" + output_folder + "/Stickers " + seating_plan.studying_in + " " + center + ".pdf";
+        plan_path = "" + output_folder + "/SeatingPlan_" + seating_plan.studying_in + "_" + center + ".pdf";
+        stickers_path = "" + output_folder + "/Stickers_" + seating_plan.studying_in + "_" + center + ".pdf";
         log("Output files: " + plan_path + " and " + stickers_path);
         plan = new PDFDocument({
             margin: 0,

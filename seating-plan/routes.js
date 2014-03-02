@@ -1,4 +1,5 @@
 var http = require("http"),
+    path = require("path"),
     util = require("util"),
     fs = require("fs"),
     express = require("express"),
@@ -11,10 +12,12 @@ var seating = require("./pdf/seating"),
 
 var log = function () {};
 
-module.exports = function (app, mountPath) {
+module.exports = function (app) {
+    var mountPath = app.mountPath;
+    
     app.get("/", function (req, res) {
         //res.send("hello");
-        res.send(jade.compile(fs.readFileSync(__dirname + "/views/index.jade"))({
+        res.send(jade.compile(fs.readFileSync(path.join(__dirname, "views", "index.jade")))({
             mountPath: mountPath,
             mountPathPublic: mountPath
         }));

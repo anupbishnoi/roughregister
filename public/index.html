@@ -2,11 +2,9 @@ Clumsy
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
-    var socket = io.connect("");
+    var socketURL = window.location.pathname.replace(/\/$/, ""),
+        socket = io.connect(socketURL);
     socket.on("from root", function () {
         console.log("from root");
-    });
-    socket.on("from socket", function () {
-        console.log("from socket");
     });
 </script>
