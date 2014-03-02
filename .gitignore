@@ -1,4 +1,4 @@
-node_modules/
+node_modules
 .password*
 Archive.zip
 seating-plan/public/archive/*.pdf

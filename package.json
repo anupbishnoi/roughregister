@@ -8,7 +8,12 @@
   },
   "dependencies": {
     "apper": "*",
-    "underscore": "*"
+    "underscore": "*",
+    
+    "formidable": "~1.0.13",
+    "express": "*",
+    "jade": "*",
+    "pdfkit": "~0.1.9"
   },
   "repository": {
     "type": "git",
