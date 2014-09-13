@@ -1,5 +1,3 @@
 node_modules
-.password*
-Archive.zip
 seating-plan/public/archive/*.pdf
-.elasticbeanstalk
+npm-debug.log

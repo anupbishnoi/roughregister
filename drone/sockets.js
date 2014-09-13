@@ -8,7 +8,7 @@ var playerNames = {};
 
 module.exports = function (app) {
 
-    var io = app.socketIO;
+    var io = app.sockets;
 
     io.on("connection", function (socket) {
         socket.on("identification", function (identification) {
