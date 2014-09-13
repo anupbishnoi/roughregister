@@ -1,3 +1,3 @@
 var app = require("apper")();
 
-app.init() && app.start();
+app.start(process.env.PORT || 80);
