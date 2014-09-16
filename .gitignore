@@ -2,3 +2,4 @@
 node_modules
 seating-plan/public/archive/*.pdf
 npm-debug.log
+.c9
