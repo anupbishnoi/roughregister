@@ -3,6 +3,11 @@ var assert = require('assert'),
     cheerio = require('cheerio');
 
 module.exports = function (app) {
+    
+    app.get('/test', function (req, res) {
+        res.send('woohoo!');
+    });
+    
     app.get('/:handle', function (req, res) {
         var handle = req.params.handle;
         
