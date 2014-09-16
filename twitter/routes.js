@@ -4,8 +4,6 @@ var assert = require('assert'),
 
 module.exports = function (app) {
     app.get('/:handle', function (req, res) {
-        res.send('hey');
-        return;
         var handle = req.params.handle;
         assert.equal(typeof handle, 'string');
         request('https://twitter.com/' + handle, function (error, response, body) {
