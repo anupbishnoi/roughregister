@@ -5,7 +5,6 @@ var assert = require('assert'),
 module.exports = function (app) {
     app.get('/:handle', function (req, res) {
         var handle = req.params.handle;
-        
         assert.equal(typeof handle, 'string');
         request('https://twitter.com/' + handle, function (error, response, body) {
             if (!error && response.statusCode == 200) {
