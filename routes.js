@@ -1,7 +1,7 @@
 var sh = require('shelljs');
 
 module.exports = function (app) {
-    app.get('/redeploy', function (req, res) {
+    app.all('/redeploy', function (req, res) {
         sh.exec('git pull');
         setTimeout(function () {
             sh.exec('forever restartall');
