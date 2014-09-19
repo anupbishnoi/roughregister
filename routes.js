@@ -8,4 +8,7 @@ module.exports = function (app) {
         }, 2000);
         res.send('restarting server');
     });
+    app.get('/memory', function (req, res) {
+        res.json(process.memoryUsage());
+    });
 };
