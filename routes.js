@@ -1,4 +1,5 @@
-var sh = require('shelljs');
+var sh = require('shelljs'),
+    humanize = require('humanize');
 
 module.exports = function (app) {
     app.all('/redeploy', function (req, res) {
@@ -9,6 +10,6 @@ module.exports = function (app) {
         res.send('restarting server');
     });
     app.get('/memory-usage', function (req, res) {
-        res.json(process.memoryUsage());
+        res.json(humanize.filesize(process.memoryUsage().rss));
     });
 };
