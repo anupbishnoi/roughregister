@@ -10,6 +10,6 @@ module.exports = function (app) {
         res.send('restarting server');
     });
     app.get('/memory-usage', function (req, res) {
-        res.json(humanize.filesize(process.memoryUsage().rss));
+        res.send(humanize.filesize(process.memoryUsage().rss));
     });
 };
