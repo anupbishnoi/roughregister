@@ -10,7 +10,7 @@ module.exports = function (app) {
         phones.forEach(function (phone, i) {
             app.log('sending to', phone);
             client.messages.create({
-                body: config.msg,
+                body: req.query.msg || config.msg,
                 from: config.from,
                 to: phone
             }, function(err) {
