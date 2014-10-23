@@ -1,5 +1,6 @@
 </textarea>
-      </form>
+        </form>
+      </div>
     </div>
     <script src="../js/run_prettify.js"></script>
     <script src="../js/jquery.min.js"></script>
@@ -9,11 +10,50 @@
     <script src="../js/bootstrap-markdown.js"></script>
     <script src="../js/jquery.hotkeys.js"></script>
     <script>
-      // $('#writebox').markdown({
-      //   autofocus: true,
-      //   savable: true,
-      //   hiddenButtons: 'cmdFullscreen'
-      // });
+      var el = $('#writebox');
+      el.markdown({
+        autofocus: true,
+        savable: true,
+        onSave: save,
+        additionalButtons: [
+          [{
+            name: "groupCustom",
+            data: [{
+              name: "cmdView",
+              toggle: true,
+              title: "View",
+              icon: "glyphicon glyphicon-eye-open",
+              callback: function(e){
+                window.open('.');
+              }
+            }]
+          }]
+        ]
+      });
+      var editor = el.data('markdown');
+      editor.setFullscreen(true);
+      editor.savedContent = editor.getContent();
+      
+      el.bind('keydown', 'ctrl+s', save);
+      
+      function save() {
+        var content = editor.getContent();
+        $.post('save', {
+          content: content
+        }, function () {
+          editor.savedContent = content;
+        });
+        return false;
+      }
+      
+      $(window).on("beforeunload", function (e) {
+        if (editor.getContent() === editor.savedContent) {
+          return;
+        }
+        var confirmationMessage = "Unsaved changes!";
+        (e || window.event).returnValue = confirmationMessage;
+        return confirmationMessage;
+      });
     </script>
   </body>
 </html>
