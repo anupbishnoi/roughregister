@@ -4,3 +4,4 @@ seating-plan/public/archive/*.pdf
 npm-debug.log
 .c9
 twilio-config.js
+*.db
