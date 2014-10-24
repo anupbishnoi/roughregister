@@ -1,0 +1,8 @@
+{
+  "name": "tp",
+  "version": "0.0.1",
+  "description": "secret service",
+  "dependencies": {
+    "twilio": "^1.7.0"
+  }
+}

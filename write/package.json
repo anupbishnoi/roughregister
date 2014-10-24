@@ -1,0 +1,16 @@
+{
+  "name": "write",
+  "description": "Easy peasy markdown notebooks",
+  "version": "0.0.1",
+  "author": {
+    "name": "Anup Bishnoi",
+    "email": "pixelsallover@gmail.com"
+  },
+  "dependencies": {
+    "body-parser": "^1.9.1",
+    "dirty": "^0.9.9",
+    "marked": "^0.3.2",
+    "pygmentize-bundled": "^2.2.0"
+  },
+  "license": "MIT"
+}

@@ -8,21 +8,8 @@
   },
   "dependencies": {
     "apper": "*",
-    "body-parser": "^1.9.1",
-    "cheerio": "^0.17.0",
-    "dirty": "^0.9.9",
-    "express": "*",
-    "formidable": "~1.0.13",
     "humanize": "0.0.9",
-    "jade": "~0.30.0",
-    "marked": "^0.3.2",
-    "pdfkit": "~0.1.9",
-    "pygmentize-bundled": "^2.2.0",
-    "request": "^2.42.0",
-    "shelljs": "^0.3.0",
-    "socket.io": "~0.8.1",
-    "twilio": "^1.7.0",
-    "underscore": "*"
+    "shelljs": "^0.3.0"
   },
   "repository": {
     "type": "git",
@@ -31,6 +18,7 @@
   "main": "index",
   "scripts": {
     "prepublish": "npm prune",
+    "preinstall": "node bin/preinstall",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "DEBUG=apper:* node server.js"
   },
