@@ -11,6 +11,9 @@ module.exports = function (app) {
     editBottom = read(f('edit-bottom.html'));
   
   app.get('/:name', function (req, res) {
+    if (!/\/$/.test(req.url)) {
+      return res.redirect(req.originalUrl + '/');
+    }
     var name = req.params.name;
     app.log('view', name);
     find(name, function (err, val) {
