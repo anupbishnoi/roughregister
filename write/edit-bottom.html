@@ -30,9 +30,13 @@
         });
         var editor = el.data('markdown');
         editor.setFullscreen(true);
+        editor.setFullscreen = function () {};
         editor.savedContent = editor.getContent();
         
         el.bind('keydown', 'ctrl+s', save);
+        el.bind('keydown', 'esc', function () {
+          return false;
+        });
         
         humane.baseCls = 'humane-libnotify';
         function save() {
@@ -73,7 +77,6 @@
           var maxWidth = 800,
             minPadding = 30,
             padding = Math.max(parseInt(($(window).width() - maxWidth) / 2, 10), minPadding);
-          console.log(padding);
           $('#writebox').each(function () {
               this.style.setProperty('padding-left', padding + 'px', 'important');
               this.style.setProperty('padding-right', padding + 'px', 'important');
