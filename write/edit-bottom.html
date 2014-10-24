@@ -37,6 +37,7 @@
         humane.baseCls = 'humane-libnotify';
         function save() {
           var content = editor.getContent();
+          if (content === editor.savedContent) return false;
           $.post('save', {
             content: content
           }, function () {
@@ -45,6 +46,8 @@
           });
           return false;
         }
+        
+        setInterval(save, 30000);
         
         $(window).on("beforeunload", function (e) {
           if (editor.getContent() === editor.savedContent) {
