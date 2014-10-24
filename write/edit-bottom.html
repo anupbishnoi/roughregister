@@ -61,10 +61,9 @@
         });
         
         var locationParts = location.href.split('/'),
-          topicName = locationParts[locationParts.length - 2],
-          title = topicName + ' - Viewing';
-        $('title').text(title);
-        $('.title').text(title);
+          topicName = locationParts[locationParts.length - 2];
+        $('title').text(topicName);
+        $('.title').text(topicName);
       }());
     </script>
   </body>
