@@ -64,7 +64,9 @@
         $('title').text($('title').text() + ': ' + topicName);
         $('.title').text(topicName);
         
-        $(window).resize(function () {
+        $(window).resize(resize);
+        resize();
+        function resize() {
           var maxWidth = 800,
             minPadding = 30,
             padding = Math.max(parseInt(($(window).width() - maxWidth) / 2, 10), minPadding);
@@ -73,7 +75,7 @@
               this.style.setProperty('padding-left', padding + 'px', 'important');
               this.style.setProperty('padding-right', padding + 'px', 'important');
           });
-        });
+        }
       }());
     </script>
   </body>
