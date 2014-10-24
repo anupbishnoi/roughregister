@@ -1,6 +1,5 @@
 </textarea>
-        </form>
-      </div>
+      </form>
     </div>
     <script src="../js/jquery.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
@@ -8,61 +7,65 @@
     <script src="../js/jquery.hotkeys.js"></script>
     <script src="../js/humane.js"></script>
     <script>
-      var el = $('#writebox');
-      el.markdown({
-        autofocus: true,
-        savable: true,
-        onSave: save,
-        hiddenButtons: 'cmdPreview',
-        additionalButtons: [
-          [{
-            name: "groupCustom",
-            data: [{
-              name: "cmdView",
-              toggle: true,
-              title: "View",
-              icon: "glyphicon glyphicon-eye-open",
-              callback: function(e){
-                window.open('.');
-              }
+      (function () {
+        var el = $('#writebox');
+        el.markdown({
+          autofocus: true,
+          savable: true,
+          onSave: save,
+          hiddenButtons: 'cmdPreview',
+          additionalButtons: [
+            [{
+              name: "groupCustom",
+              data: [{
+                name: "cmdView",
+                toggle: true,
+                title: "View",
+                icon: "glyphicon glyphicon-eye-open",
+                callback: function(e){
+                  window.open('.');
+                }
+              }]
             }]
-          }]
-        ]
-      });
-      var editor = el.data('markdown');
-      editor.setFullscreen(true);
-      editor.savedContent = editor.getContent();
-      
-      el.bind('keydown', 'ctrl+s', save);
-      
-      humane.baseCls = 'humane-libnotify';
-      function save() {
-        var content = editor.getContent();
-        $.post('save', {
-          content: content
-        }, function () {
-          editor.savedContent = content;
-          humane.log('Saved');
+          ]
         });
-        return false;
-      }
-      
-      $(window).on("beforeunload", function (e) {
-        if (editor.getContent() === editor.savedContent) {
-          return;
+        var editor = el.data('markdown');
+        editor.setFullscreen(true);
+        editor.savedContent = editor.getContent();
+        
+        el.bind('keydown', 'ctrl+s', save);
+        
+        humane.baseCls = 'humane-libnotify';
+        function save() {
+          var content = editor.getContent();
+          $.post('save', {
+            content: content
+          }, function () {
+            editor.savedContent = content;
+            humane.log('Saved');
+          });
+          return false;
         }
-        var confirmationMessage = "Unsaved changes!";
-        (e || window.event).returnValue = confirmationMessage;
-        return confirmationMessage;
-      });
-      
-      $('body').animate({
-        opacity: 1
-      });
-      
-      var locationParts = location.href.split('/'),
-        topicName = locationParts[locationParts.length - 2];
-      $('title').text($('title').text() + ': ' + topicName);
+        
+        $(window).on("beforeunload", function (e) {
+          if (editor.getContent() === editor.savedContent) {
+            return;
+          }
+          var confirmationMessage = "Unsaved changes!";
+          (e || window.event).returnValue = confirmationMessage;
+          return confirmationMessage;
+        });
+        
+        $('body').animate({
+          opacity: 1
+        });
+        
+        var locationParts = location.href.split('/'),
+          topicName = locationParts[locationParts.length - 2],
+          title = topicName + ' - Viewing';
+        $('title').text(title);
+        $('.title').text(title);
+      }());
     </script>
   </body>
 </html>
