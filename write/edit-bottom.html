@@ -68,7 +68,7 @@
         $('title').text($('title').text() + ': ' + topicName);
         $('.title').text(topicName);
         
-        $(window).resize($.throttle(100, function () {
+        $(window).resize($.throttle(0, function () {
           var maxWidth = 800,
             minPadding = 30,
             padding = Math.max(parseInt(($(window).width() - maxWidth) / 2, 10), minPadding);
