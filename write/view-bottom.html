@@ -3,10 +3,14 @@
     <script src="../js/jquery.min.js"></script>
     <script src="../js/toc.js"></script>
     <script>
-        $('#toc').toc();
-        $('body').animate({
-            opacity: 1
-        });
+      $('#toc').toc();
+      $('body').animate({
+          opacity: 1
+      });
+      
+      var locationParts = location.split('/'),
+        topicName = locationParts[locationParts.length - 2];
+      $('title').text($('title').text() + ': ' + topicName);
     </script>
   </body>
 </html>

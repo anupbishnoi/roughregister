@@ -59,6 +59,10 @@
       $('body').animate({
         opacity: 1
       });
+      
+      var locationParts = location.split('/'),
+        topicName = locationParts[locationParts.length - 2];
+      $('title').text($('title').text() + ': ' + topicName);
     </script>
   </body>
 </html>
