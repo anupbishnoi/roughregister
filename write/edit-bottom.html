@@ -60,7 +60,7 @@
         opacity: 1
       });
       
-      var locationParts = location.split('/'),
+      var locationParts = location.href.split('/'),
         topicName = locationParts[locationParts.length - 2];
       $('title').text($('title').text() + ': ' + topicName);
     </script>
