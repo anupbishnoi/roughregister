@@ -10,19 +10,20 @@
     <link rel="stylesheet" href="../css/humane-libnotify.css">
     <style>
       body { opacity: 0; }
-      #writebox {
-        max-width: 800px;
-        font-size: 16px !important;
+      .md-editor #writebox {
+        font-size: 16px;
       }
-      .container { max-width: 800px; }
       .title { color: darkgrey; }
-      .md-editor.md-fullscreen-mode .md-fullscreen-controls {
+      .md-editor.md-fullscreen-mode .md-control-fullscreen {
         display: none;
+      }
+      .md-editor.md-fullscreen-mode {
+        padding-left: 0;
+        padding-right: 0;
       }
     </style>
   </head>
   <body>
-    <div class="container">
-      <h1 class="title"></h1>
-      <form>
-        <textarea id="writebox" rows="30" columns="30">
+    <h1 class="title"></h1>
+    <form>
+      <textarea id="writebox" rows="30" columns="30">
