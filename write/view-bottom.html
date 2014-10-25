@@ -4,9 +4,11 @@
     <script src="../js/toc.js"></script>
     <script>
       $('#toc').toc();
-      $('body').animate({
-          opacity: 1
-      });
+      
+      var locationParts = location.href.split('/'),
+        topicName = locationParts[locationParts.length - 2];
+      $('title').text($('title').text() + ': ' + topicName);
+      $('.title').text(topicName);
     </script>
   </body>
 </html>
