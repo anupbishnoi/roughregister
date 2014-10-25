@@ -35,20 +35,22 @@
         
         el.bind('keydown', 'ctrl+s', save);
         
-        humane.baseCls = 'humane-libnotify';
-        function save() {
+        window.humane.baseCls = 'humane-libnotify';
+        function save(e) {
           var content = editor.getContent();
-          if (content === editor.savedContent) return false;
+          if (content === editor.savedContent) {
+            return false;
+          }
           $.post('save', {
             content: content
           }, function () {
             editor.savedContent = content;
-            humane.log('Saved');
+            if (e) window.humane.log('Saved');
           });
           return false;
         }
         
-        setInterval(save, 30000);
+        setInterval(save, 10000);
         
         $(window).on("beforeunload", function (e) {
           if (editor.getContent() === editor.savedContent) {
