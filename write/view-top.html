@@ -16,14 +16,32 @@
     <style>
       body {
         opacity: 0;
+        padding: 0;
+        max-width: none;
+      }
+      body, html {
+        height: 98%;
+      }
+      .block {
+        float: left;
+        height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+      #toc {
+        position: relative;
+        width: 25%;
+      }
+      .spacer {
+        width: 5%;
       }
       body > .container {
-        position: relative;
-        left: 160px;
+        width: 70%;
       }
     </style>
   </head>
   <body>
-    <div id="toc"></div>
-    <div class="container">
+    <div id="toc" class="block"></div>
+    <div class="spacer block"></div>
+    <div class="container block">
       
