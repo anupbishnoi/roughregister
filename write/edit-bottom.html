@@ -34,6 +34,7 @@
         editor.savedContent = editor.getContent();
         
         el.bind('keydown', 'ctrl+s', save);
+        el.bind('keydown', 'meta+s', save);
         
         window.humane.baseCls = 'humane-libnotify';
         function save(e) {

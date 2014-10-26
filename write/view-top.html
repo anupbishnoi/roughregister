@@ -16,39 +16,30 @@
     <style>
       body {
         padding: 0;
-        max-width: none;
       }
-      .block {
+      #toc {
         overflow-x: hidden;
         overflow-y: auto;
       }
-      #toc {
-        position: relative;
-        width: 100%;
+      ul {
+        margin-left: 20px;
       }
-      
-      @media (min-width: 480px) {
-        body, html {
-          height: 98%;
-        }
-        .block {
-          float: left;
-          height: 100%;
-        }
+      .container {
+        margin-left: 170px;
+      }
+      @media (max-width: 480px) {
         #toc {
-          width: 25%;
+          position: relative;
+          height: auto;
+          width: 100%;
         }
-        .spacer {
-          width: 5%;
-        }
-        body > .container {
-          width: 70%;
+        .container {
+          margin-left: 10px;
         }
       }
     </style>
   </head>
   <body>
-    <div id="toc" class="block"></div>
-    <div class="spacer block"></div>
-    <div class="container block">
+    <div id="toc"></div>
+    <div class="container">
       
