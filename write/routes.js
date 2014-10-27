@@ -11,13 +11,13 @@ module.exports = function (app) {
     editTop = read(f('edit-top.html')),
     editBottom = read(f('edit-bottom.html'));
   
-  app.get('/:name', function (req, res) {
+  app.get('/:name/', function (req, res) {
     var url = parseUrl(req.originalUrl);
     if (!/\/$/.test(url.pathname)) {
       var newUrl = url.pathname + '/' +
           (url.search || '') +
           (url.hash || '');
-      // app.log('redirect to', newUrl);
+      app.log('redirect to', newUrl);
       return res.redirect(newUrl);
     }
     var name = req.params.name;
