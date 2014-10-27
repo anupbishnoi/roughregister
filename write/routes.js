@@ -1,7 +1,8 @@
 var marked = require('marked'),
   pyg = require('pygmentize-bundled'),
   dirty = require('dirty'),
-  fs = require('fs');
+  fs = require('fs'),
+  parseUrl = require('url').parse;
 
 var db = dirty('write.db');
 module.exports = function (app) {
@@ -11,8 +12,13 @@ module.exports = function (app) {
     editBottom = read(f('edit-bottom.html'));
   
   app.get('/:name', function (req, res) {
-    if (!/\/$/.test(req.url)) {
-      return res.redirect(req.originalUrl + '/');
+    var url = parseUrl(req.originalUrl);
+    if (!/\/$/.test(url.pathname)) {
+      var newUrl = url.pathname + '/' +
+          (url.search || '') +
+          (url.hash || '');
+      // app.log('redirect to', newUrl);
+      return res.redirect(newUrl);
     }
     var name = req.params.name;
     app.log('view', name);
