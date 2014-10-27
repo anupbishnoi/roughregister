@@ -36,18 +36,24 @@
         el.bind('keydown', 'ctrl+s', save);
         el.bind('keydown', 'meta+s', save);
         
-        window.humane.baseCls = 'humane-libnotify';
+        var humane = window.humane;
+        humane.baseCls = 'humane-libnotify';
+        humane.error = humane.spawn({ addnCls: 'humane-libnotify-error' })
+        
         function save(e) {
           var content = editor.getContent();
           if (content === editor.savedContent) {
-            if (e) window.humane.log('No changes');
+            if (e) window.humane.log('Already saved');
             return false;
           }
           $.post('save', {
-            content: content
+            content: content,
+            previousContent: editor.savedContent
           }, function () {
             editor.savedContent = content;
-            if (e) window.humane.log('Saved');
+            if (e) humane.log('Saved');
+          }).fail(function (res) {
+            if (e) humane.error(res.statusText + '\nReload page');
           });
           return false;
         }

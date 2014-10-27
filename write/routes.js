@@ -49,11 +49,22 @@ module.exports = function (app) {
   
   app.post('/:name/save', function (req, res){
     var name = req.params.name,
-      content = req.body.content;
+      content = req.body.content,
+      prev = req.body.previousContent;
     app.log('save', name);
     // app.log('save md', content);
-    db.set(name, content, function () {
-      res.send('success');
+    find(name, function (err, md) {
+      if (err) return error(500);
+      if (md !== prev) return error(409);
+      
+      db.set(name, content, function () {
+        res.send('success');
+      });
+      
+      function error(status) {
+        res.status(status);
+        res.end();
+      }
     });
   });
 };
