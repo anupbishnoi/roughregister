@@ -53,7 +53,7 @@
             editor.savedContent = content;
             if (e) humane.log('Saved');
           }).fail(function (res) {
-            if (e) humane.error(res.statusText + '\nReload page');
+            humane.error(res.statusText + '\nReload page');
           });
           return false;
         }
