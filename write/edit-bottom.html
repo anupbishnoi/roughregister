@@ -77,6 +77,7 @@
         $(window).on("beforeunload", function (e) {
           var editor = app.editor;
           if (editor.getContent() === editor.savedContent) {
+            app.socket.disconnect();
             return;
           }
           var confirmationMessage = "Unsaved changes!";
@@ -116,10 +117,7 @@
         var locationParts = window.location.pathname.split('/'),
           mountPath = locationParts.slice(0, -2).join('/'),
           topic = locationParts.slice(-2)[0];
-        var socket = window.io.connect(mountPath, {
-          'sync disconnect on unload': true,
-          'close timeout': 0
-        });
+        var socket = window.io(mountPath);
         socket.on('connect', function () {
           socket.emit('topic', topic);
         });
