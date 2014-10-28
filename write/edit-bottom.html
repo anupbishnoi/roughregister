@@ -5,13 +5,46 @@
     <script src="../js/bootstrap-markdown.js"></script>
     <script src="../js/jquery.hotkeys.js"></script>
     <script src="../js/humane.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script>
+      var app = {};
+      
+      // saving behavior
+      (function () {
+        var humane = window.humane;
+        humane.baseCls = 'humane-libnotify';
+        humane.error = humane.spawn({ addnCls: 'humane-libnotify-error' });
+        
+        function save(e) {
+          var editor = app.editor;
+          var content = editor.getContent();
+          if (content === editor.savedContent) {
+            if (e) window.humane.log('Already saved');
+            return false;
+          }
+          $.post('save', {
+            content: content,
+            previousContent: editor.savedContent
+          }, function () {
+            editor.savedContent = content;
+            if (e) humane.log('Saved');
+          }).fail(function (res) {
+            humane.error(res.statusText + ', reload page');
+          });
+          return false;
+        }
+        
+        setInterval(save, 10000);
+        app.save = save;
+      }());
+      
+      // setup editor
       (function () {
         var el = $('#writebox');
         el.markdown({
           autofocus: true,
           savable: true,
-          onSave: save,
+          onSave: app.save,
           hiddenButtons: 'cmdPreview',
           additionalButtons: [
             [{
@@ -33,34 +66,16 @@
         editor.setFullscreen = function () {};
         editor.savedContent = editor.getContent();
         
-        el.bind('keydown', 'ctrl+s', save);
-        el.bind('keydown', 'meta+s', save);
+        el.bind('keydown', 'ctrl+s', app.save);
+        el.bind('keydown', 'meta+s', app.save);
         
-        var humane = window.humane;
-        humane.baseCls = 'humane-libnotify';
-        humane.error = humane.spawn({ addnCls: 'humane-libnotify-error' })
-        
-        function save(e) {
-          var content = editor.getContent();
-          if (content === editor.savedContent) {
-            if (e) window.humane.log('Already saved');
-            return false;
-          }
-          $.post('save', {
-            content: content,
-            previousContent: editor.savedContent
-          }, function () {
-            editor.savedContent = content;
-            if (e) humane.log('Saved');
-          }).fail(function (res) {
-            humane.error(res.statusText + ', reload page');
-          });
-          return false;
-        }
-        
-        setInterval(save, 10000);
-        
+        app.editor = editor;
+      }());
+      
+      // dirty editor
+      (function () {
         $(window).on("beforeunload", function (e) {
+          var editor = app.editor;
           if (editor.getContent() === editor.savedContent) {
             return;
           }
@@ -68,7 +83,10 @@
           (e || window.event).returnValue = confirmationMessage;
           return confirmationMessage;
         });
-        
+      }());
+      
+      // setup page ui
+      (function () {
         $('body').animate({
           opacity: 1
         });
@@ -88,6 +106,23 @@
               this.style.setProperty('padding-right', padding + 'px', 'important');
           });
         }
+      }());
+      
+      // set current users
+      (function () {
+        var el = $('<span class="current-users">');
+        $('.md-fullscreen-controls').append(el);
+        
+        var locationParts = window.location.pathname.split('/'),
+          mountPath = locationParts.slice(0, -2).join('/'),
+          topic = locationParts.slice(-2)[0];
+        var socket = window.io(mountPath);
+        socket.on('connect', function () {
+          socket.emit('topic', topic);
+        });
+        socket.on('users', function (count) {
+          el.text(count > 1 ? (count + ' users') : '');
+        });
       }());
     </script>
   </body>
