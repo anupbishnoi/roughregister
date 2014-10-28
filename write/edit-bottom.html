@@ -116,7 +116,9 @@
         var locationParts = window.location.pathname.split('/'),
           mountPath = locationParts.slice(0, -2).join('/'),
           topic = locationParts.slice(-2)[0];
-        var socket = window.io(mountPath);
+        var socket = window.io(mountPath, {
+          'sync disconnect on unload': true
+        });
         socket.on('connect', function () {
           socket.emit('topic', topic);
         });
