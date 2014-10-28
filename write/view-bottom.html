@@ -2,13 +2,24 @@
     </div>
     <script src="../js/jquery.min.js"></script>
     <script src="../js/toc.js"></script>
+    <script type="text/template" id="title-template">
+      <div class="edit-icon">
+        <a target="_blank" href="edit">
+          <i class="fa fa-pencil"></i>
+        </a>
+      </div>
+      <div class="title"></div>
+    </script>
     <script>
       $('#toc').toc();
+      $('#toc').prepend($('#title-template').html());
       
       var locationParts = location.href.split('/'),
         topicName = locationParts[locationParts.length - 2];
       $('title').text($('title').text() + ': ' + topicName);
       $('.title').text(topicName);
     </script>
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
   </body>
 </html>

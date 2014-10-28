@@ -37,10 +37,6 @@ module.exports = function (app) {
   });
   
   app.get('/:name/edit', function (req, res) {
-  var viewTop = read(f('view-top.html')),
-    viewBottom = read(f('view-bottom.html')),
-    editTop = read(f('edit-top.html')),
-    editBottom = read(f('edit-bottom.html'));
     var name = req.params.name;
     app.log('edit', name);
     find(name, function (err, md) {
