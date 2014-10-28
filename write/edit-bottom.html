@@ -77,6 +77,7 @@
         $(window).on("beforeunload", function (e) {
           var editor = app.editor;
           if (editor.getContent() === editor.savedContent) {
+            app.socket.emit('disconnect');
             return;
           }
           var confirmationMessage = "Unsaved changes!";
@@ -126,6 +127,8 @@
         socket.on('users', function (count) {
           el.text(count > 1 ? (count + ' users') : '');
         });
+        
+        app.socket = socket;
       }());
     </script>
   </body>
