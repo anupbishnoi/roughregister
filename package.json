@@ -9,6 +9,7 @@
   "dependencies": {
     "apper": "*",
     "humanize": "0.0.9",
+    "npm": "^2.1.5",
     "shelljs": "^0.3.0"
   },
   "repository": {
@@ -18,9 +19,12 @@
   "main": "index",
   "scripts": {
     "prepublish": "npm prune",
-    "preinstall": "node bin/preinstall",
+    "preinstall": "node bin/nestedinstall",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "DEBUG=apper:* node server.js"
+  },
+  "config": {
+    "unsafe-perm": true
   },
   "engines": {
     "node": "*"
