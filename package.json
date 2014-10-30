@@ -16,7 +16,6 @@
     "type": "git",
     "url": "git://github.com/anupbishnoi/roughregister"
   },
-  "main": "index",
   "scripts": {
     "prepublish": "npm prune",
     "preinstall": "node bin/nestedinstall",
