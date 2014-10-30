@@ -9,8 +9,12 @@
   "dependencies": {
     "body-parser": "^1.9.1",
     "dirty": "^0.9.9",
+    "ejs": "^1.0.0",
     "marked": "^0.3.2",
     "pygmentize-bundled": "^2.2.0"
+  },
+  "scripts": {
+    "start": "DEBUG=apper:* node server.js"
   },
   "license": "MIT"
 }

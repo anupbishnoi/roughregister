@@ -2,15 +2,12 @@ var marked = require('marked'),
   pyg = require('pygmentize-bundled'),
   dirty = require('dirty'),
   fs = require('fs'),
-  parseUrl = require('url').parse;
+  crypto = require('crypto'),
+  parseUrl = require('url').parse,
+  path = require('path');
 
-var db = dirty('write.db');
 module.exports = function (app) {
-  var viewTop = read(f('view-top.html')),
-    viewBottom = read(f('view-bottom.html')),
-    editTop = read(f('edit-top.html')),
-    editBottom = read(f('edit-bottom.html'));
-  
+  var db = dirty(path.join(__dirname, 'write.db'));
   app.get('/:name/', function (req, res) {
     var url = parseUrl(req.originalUrl);
     if (!/\/$/.test(url.pathname)) {
@@ -31,7 +28,9 @@ module.exports = function (app) {
       marked(val, function (err, html) {
         if (err) return res.end(err.stack);
         // app.log('html', html);
-        res.send(viewTop + html + viewBottom);
+        res.render('view.html', {
+          html: html
+        });
       });
     });
   });
@@ -43,22 +42,31 @@ module.exports = function (app) {
       if (err) return res.end(err.stack);
       md = md || '';
       // app.log('edit md', md);
-      res.send(editTop + md + editBottom);
+      var version = hash(md);
+      app.log('sending version', version);
+      res.render('edit.html', {
+        md: md,
+        version: version
+      });
     });
   });
-  
+
   app.post('/:name/save', function (req, res){
     var name = req.params.name,
       content = req.body.content,
-      prev = req.body.previousContent;
+      clientVersion = req.body.savedVersion;
     app.log('save', name);
     // app.log('save md', content);
     find(name, function (err, md) {
       if (err) return error(500);
-      if (md !== prev) return error(409);
+      var lastVersion = hash(md);
+      if (clientVersion !== lastVersion)
+        return error(409);
       
       db.set(name, content, function () {
-        res.send('success');
+        var newVersion = hash(content);
+        app.log('new version', newVersion);
+        res.send(newVersion);
       });
       
       function error(status) {
@@ -67,6 +75,19 @@ module.exports = function (app) {
       }
     });
   });
+  
+  function find(key, fn) {
+    var found;
+    db.forEach(function (k, val) {
+      if (key === k) {
+        found = true;
+        fn(null, val);
+        return false;
+      }
+    });
+    if (!found) fn(null, undefined);
+  }
+
 };
 
 // Syntax highlighting with pygmentize-bundled
@@ -94,14 +115,8 @@ function stream(file) {
   return fs.createReadStream(file);
 }
 
-function find(key, fn) {
-  var found;
-  db.forEach(function (k, val) {
-    if (key === k) {
-      found = true;
-      fn(null, val);
-      return false;
-    }
-  });
-  if (!found) fn(null, undefined);
+function hash(md) {
+  var shasum = crypto.createHash('sha1');
+  shasum.update(md);
+  return shasum.digest('hex');
 }

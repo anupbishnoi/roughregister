@@ -1,4 +1,35 @@
-</textarea>
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Editing</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/bootstrap-markdown.min.css">
+    <link rel="stylesheet" href="../css/humane-libnotify.css">
+    <style>
+      body { opacity: 0; }
+      #writebox {
+        font-size: 16px !important;
+      }
+      .md-editor.md-fullscreen-mode .md-control-fullscreen,
+      .md-editor.md-fullscreen-mode .exit-fullscreen {
+        display: none;
+      }
+      .md-editor.md-fullscreen-mode {
+        padding-left: 0;
+        padding-right: 0;
+      }
+      #version-hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <form>
+      <textarea id="writebox" rows="30"
+          columns="30"><%= md %></textarea>
     </form>
     <script src="../js/jquery.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
@@ -8,6 +39,13 @@
     <script src="../js/io.js"></script>
     <script>
       var app = {};
+      
+      // environment
+      (function () {
+        var env = app.env = {};
+        env.mountPath = '<%= mountPath %>';
+        env.savedVersion = '<%= version %>';
+      }());
       
       // saving behavior
       (function () {
@@ -24,12 +62,13 @@
           }
           $.post('save', {
             content: content,
-            previousContent: editor.savedContent
-          }, function () {
+            savedVersion: app.env.savedVersion
+          }, function (version) {
             editor.savedContent = content;
+            app.env.savedVersion = version;
             if (e) humane.log('Saved');
           }).fail(function (res) {
-            humane.error(res.statusText + ', reload page');
+            humane.error(res.statusText);
           });
           return false;
         }
@@ -68,6 +107,16 @@
         
         el.bind('keydown', 'ctrl+s', app.save);
         el.bind('keydown', 'meta+s', app.save);
+        
+        el.bind('keydown', 'tab', function () {
+          var s = el.selectionStart;
+          app.editor.replaceSelection('  ');
+          setTimeout(setPos, 200);
+          function setPos() {
+            el.selectionStart = el.selectionEnd = s + 2;
+          }
+          return false;
+        });
         
         app.editor = editor;
       }());
