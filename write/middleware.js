@@ -8,4 +8,9 @@ module.exports = function (app) {
     res.locals.mountPath = app.mountPath;
     next();
 });
+
+  app.use('/files/:file', function (req, res, next) {
+    app.log('file', req.params.file);
+    res.redirect('/files/' + req.params.file);
+  });
 };
