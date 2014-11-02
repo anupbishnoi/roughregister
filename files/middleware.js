@@ -1,5 +1,6 @@
-var serveStatic = require('serve-static');
+var serveStatic = require('serve-static'),
+  filesPath = require('./files-path');
 
 module.exports = function (app) {
-  app.use(serveStatic('/home/ftpuser/files'));
+  app.use(serveStatic(filesPath));
 };
