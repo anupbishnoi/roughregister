@@ -53,6 +53,7 @@
         humane.baseCls = 'humane-libnotify';
         humane.error = humane.spawn({ addnCls: 'humane-libnotify-error' });
         
+        var isSaving = false;
         function save(e) {
           var editor = app.editor;
           var content = editor.getContent();
@@ -60,14 +61,17 @@
             if (e) window.humane.log('Already saved');
             return false;
           }
+          if (isSaving) return false;
           $.post('save', {
             content: content,
             savedVersion: app.env.savedVersion
           }, function (version) {
+            isSaving = false;
             editor.savedContent = content;
             app.env.savedVersion = version;
             if (e) humane.log('Saved');
           }).fail(function (res) {
+            isSaving = false;
             humane.error(res.statusText);
           });
           return false;
@@ -196,7 +200,7 @@
           socket.emit('topic', topic);
         });
         socket.on('users', function (count) {
-          el.text(count > 1 ? (count + ' users') : '');
+          el.text(count > 1 ? (count + ' writers') : '');
         });
         
         app.socket = socket;
