@@ -1,1 +1,0 @@
-module.exports = '/home/ftpuser/files';
