@@ -117,6 +117,6 @@ function stream(file) {
 
 function hash(md) {
   var shasum = crypto.createHash('sha1');
-  shasum.update(md);
+  shasum.update(md || '');
   return shasum.digest('hex');
 }
