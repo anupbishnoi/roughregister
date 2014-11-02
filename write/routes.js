@@ -35,6 +35,11 @@ module.exports = function (app) {
     });
   });
   
+  app.get('/:name/files/:file*', function (req, res, next) {
+    app.log('file', req.params.file);
+    res.redirect('/files/' + req.params.file);
+  });
+  
   app.get('/:name/edit', function (req, res) {
     var name = req.params.name;
     app.log('edit', name);
