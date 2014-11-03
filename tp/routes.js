@@ -1,8 +1,11 @@
 var config = require('./twilio-config'),
     accountSid = config.accountSid,
-    authToken = config.authToken;
+    authToken = config.authToken,
+    client;
 
-var client = require('twilio')(accountSid, authToken);
+if (accountSid && authToken) {
+    client = require('twilio')(accountSid, authToken);
+}
 
 module.exports = function (app) {
     app.get('/', function (req, res) {
