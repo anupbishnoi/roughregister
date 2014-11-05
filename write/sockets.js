@@ -3,6 +3,7 @@ module.exports = function (app) {
   var sockets = app.sockets;
   sockets.on('connection', function (s) {
     onTopic.call(app, s);
+    onComment.call(app, s);
   });
 };
 
@@ -30,6 +31,9 @@ function onDisconnect(s, t) {
   });
 }
 
-function onComment() {
-  
+function onComment(s) {
+  var app = this;
+  s.on('comment', function (p, comment) {
+    
+  });
 }

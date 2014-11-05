@@ -82,16 +82,9 @@
       </div>
       <div class="title"></div>
     </script>
-    <script>
-      $('#toc').toc();
-      $('#toc').prepend($('#title-template').html());
-      
-      var locationParts = location.href.split('/'),
-        topicName = locationParts[locationParts.length - 2];
-      $('title').text($('title').text() + ': ' + topicName);
-      $('.title').text(topicName);
-    </script>
     
+    <script src="../views/view/index.js"></script>
+
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
   </body>
 </html>
