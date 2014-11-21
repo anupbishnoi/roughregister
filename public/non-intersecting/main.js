@@ -195,14 +195,14 @@ GraphCanvas.prototype.drawLine = function (b1, b2) {
 GraphCanvas.prototype.drawGrid = function () {
   var ctx = this.ctx;
   var i;
-  for (i = 1; i < this.gridSize; i++) {
+  for (i = 1; i <= this.gridSize; i++) {
     ctx.beginPath();
     ctx.moveTo(0, i * this.boxSize);
     ctx.lineTo(this.gridSize * this.boxSize, i * this.boxSize);
     ctx.lineWidth = 1;
     ctx.stroke();
   }
-  for (i = 1; i < this.gridSize; i++) {
+  for (i = 1; i <= this.gridSize; i++) {
     ctx.beginPath();
     ctx.moveTo(i * this.boxSize, 0);
     ctx.lineTo(i * this.boxSize, this.gridSize * this.boxSize);
