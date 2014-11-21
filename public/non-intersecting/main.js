@@ -1,3 +1,4 @@
+// Main 
 function GraphSearch($graph, implementation) {
   this.$graph = $graph;
   this.search = implementation;
@@ -58,6 +59,7 @@ GraphSearch.prototype.clicked = function(ev) {
   var endNode = this.nodeFromBox(box);
   if (this.isWall(box) || this.isStartBox(box)) {
  		alert('Clicked a line, try again.');
+ 		this.startBox = null;
  		return;
  	}
  	if (!this.startBox) {
