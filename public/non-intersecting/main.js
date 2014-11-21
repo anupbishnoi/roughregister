@@ -11,9 +11,14 @@ function GraphSearch($graph, implementation) {
 }
 
 GraphSearch.prototype.initialize = function() {
-  this.screenDimension = Math.min(this.$graph.width(), this.$graph.height());
-  this.$graph.attr('width', this.screenDimension);
-  this.$graph.attr('height', this.screenDimension);
+  this.screenDimension = Math.min($('body').width(), $('body').height());
+  var $graph = this.$graph;
+  $graph.attr('width', this.screenDimension);
+  $graph.attr('height', this.screenDimension);
+  $graph.css({
+    width: this.screenDimension,
+    height: this.screenDimension
+  });
   
   var boxSize = this.boxSize = this.opts.boxSize;
   this.gridSize = Math.floor(this.screenDimension / this.boxSize);
@@ -101,17 +106,18 @@ GraphSearch.prototype.boxFromNode = function (node) {
 };
 GraphSearch.prototype.animateLine = function (path) {
   var timeout = 100/this.graph.nodes.length;
+  var startNode = this.nodeFromBox(this.startBox);
   var step = function (path, i) {
     if (i >= path.length) return this.updateGrid();
     var box = this.boxFromNode(path[i]),
-      prevBox = this.boxFromNode(path[i - 1]);
+      prevBox = this.boxFromNode(path[i - 1] || startNode);
     this.setWall(box);
     this.drawLine(prevBox, box);
     setTimeout(function () {
       step(path, i + 1);
     }, timeout);
   }.bind(this);
-  step(path, 1);
+  step(path, 0);
 };
 GraphSearch.prototype.drawLine = function (b1, b2) {
   var b1Center = b1.center(),
@@ -122,6 +128,24 @@ GraphSearch.prototype.drawLine = function (b1, b2) {
   ctx.lineTo(b2Center.x, b2Center.y);
   ctx.lineWidth = 1;
   ctx.stroke();
+};
+GraphSearch.prototype.drawGrid = function () {
+  var ctx = this.ctx;
+  var i;
+  for (i = 1; i < this.gridSize; i++) {
+    ctx.beginPath();
+    ctx.moveTo(0, i * this.boxSize);
+    ctx.lineTo(this.gridSize * this.boxSize, i * this.boxSize);
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+  for (i = 1; i < this.gridSize; i++) {
+    ctx.beginPath();
+    ctx.moveTo(i * this.boxSize, 0);
+    ctx.lineTo(i * this.boxSize, this.gridSize * this.boxSize);
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
 };
 
 function Box(x, y, size) {
