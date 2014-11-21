@@ -1,9 +1,15 @@
-// Main 
-function GraphSearch($graph, implementation) {
+/**
+ * UI widget for initializing a canvas element with search grid.
+ * @constructor
+ * @param {JQuery} $graph - Base canvas element wrapped by jQuery.
+ * @param {function} implementation - The graph search implementation.
+ * @param {object} opts - Options object for extending the widget's behavior.
+ */
+function GraphCanvas($graph, implementation, opts) {
   this.$graph = $graph;
   this.search = implementation;
   
-  this.opts = { boxSize: 10 };
+  this.opts = $.extend({ boxSize: 10 }, opts);
   this.grid = [];
   this.boxes = [];
   this.walls = {};
@@ -11,7 +17,14 @@ function GraphSearch($graph, implementation) {
   this.initialize();
 }
 
-GraphSearch.prototype.initialize = function() {
+/**
+ * Initializes the canvas element with best-fit width and height,
+ * creates empty grid for use with provided graph search algorithm,
+ * binds event handlers for touch and mouse input.
+ * Importantly, divides the canvas into a grid of boxes on which we
+ * will draw lines.
+ */
+GraphCanvas.prototype.initialize = function() {
   this.screenDimension = Math.min($('body').width(), $('body').height());
   var $graph = this.$graph;
   $graph.attr('width', this.screenDimension);
@@ -38,7 +51,10 @@ GraphSearch.prototype.initialize = function() {
   this.$graph.bind('click touchstart', this.clicked.bind(this));
 };
 
-GraphSearch.prototype.updateGrid = function () {
+/**
+ * Updates search grid on each new line drawn.
+ */
+GraphCanvas.prototype.updateGrid = function () {
   this.boxes.forEach(function (box) {
     if (this.isWall(box)) {
       var node = this.nodeFromBox(box);
@@ -48,14 +64,20 @@ GraphSearch.prototype.updateGrid = function () {
   this.graph = new Graph(this.grid);
 };
 
-GraphSearch.prototype.clicked = function(ev) {
+/**
+ * Click (or touch) handler that:
+ * - identifies its box
+ * - validates the click
+ * - searches `grid` for a path to join two boxes clicked in succession
+ * - starts animating the path
+ */
+GraphCanvas.prototype.clicked = function(ev) {
   var offset = this.$graph.offset();
   var box = this.boxAt({
     x: ev.clientX - offset.left,
     y: ev.clientY - offset.top
   });
   assert(box, 'no box found for', ev.clientX, ev.clientY);
-  console.log('box clicked', box);
   var endNode = this.nodeFromBox(box);
   if (this.isWall(box) || this.isStartBox(box)) {
  		alert('Clicked a line, try again.');
@@ -76,37 +98,66 @@ GraphSearch.prototype.clicked = function(ev) {
   }
   this.startBox = null;
 };
-GraphSearch.prototype.isWall = function (box) {
+
+/**
+ * Whether a particular box is a wall
+ * By wall, we mean that it has been part of a line already,
+ * so it cannot be traversed again
+ */
+GraphCanvas.prototype.isWall = function (box) {
   return this.walls[box.toString()];
 };
-GraphSearch.prototype.setWall = function (box) {
+
+/**
+ * Sets the passed box as a wall
+ * @param {Box} box - box to mark as a wall
+ */
+GraphCanvas.prototype.setWall = function (box) {
   this.walls[box.toString()] = true;
 };
-GraphSearch.prototype.isStartBox = function (box) {
+
+/**
+ * Whether the passed box equates the starting box for the current line
+ * @param {Box} box - box to check for'
+ */
+GraphCanvas.prototype.isStartBox = function (box) {
   return this.startBox && this.startBox.equals(box);
 };
-GraphSearch.prototype.boxAt = function (coords) {
+
+/**
+ * Finds the box at the specified coordinates on the canvas
+ * @param {object} coords - `x`, `y` relative to the canvas'
+ */
+GraphCanvas.prototype.boxAt = function (coords) {
   var x = Math.floor(coords.x / this.boxSize),
     y = Math.floor(coords.y / this.boxSize);
-  // return this.graph.nodes[x][y];
   return this.boxes[(x * this.gridSize) + y];
-  // for (var i = 0; i < this.boxes.length; i++) {
-  //   var box = this.boxes[i];
-  //   if (box.x <= coords.x && box.y < coords.y &&
-  //       (box.x + box.size) > coords.x && (box.y + box.size) > coords.y) {
-  //     return box;
-  //   }
-  // }
 };
-GraphSearch.prototype.nodeFromBox = function (box) {
+
+/**
+ * Gets the `GraphNode` in `grid` corresponding to the specified box
+ * @param {Box} box
+ */
+GraphCanvas.prototype.nodeFromBox = function (box) {
   var xIndex = Math.floor(box.x / this.boxSize),
     yIndex = Math.floor(box.y / this.boxSize);
   return this.graph.nodes[xIndex][yIndex];
 };
-GraphSearch.prototype.boxFromNode = function (node) {
+
+/**
+ * Gets the corresponding box in `GraphCanvas` for a `GraphNode`
+ * @param {GraphNode} node
+ */
+GraphCanvas.prototype.boxFromNode = function (node) {
   return this.boxes[node.x * this.gridSize + node.y];
 };
-GraphSearch.prototype.animateLine = function (path) {
+
+/**
+ * Animates the line through its path,
+ * marking each box as a wall on the way
+ * @param {GraphNode[]} path - The path to traverse in order to draw the line
+ */
+GraphCanvas.prototype.animateLine = function (path) {
   var timeout = 100/this.graph.nodes.length;
   var startNode = this.nodeFromBox(this.startBox);
   var step = function (path, i) {
@@ -121,7 +172,13 @@ GraphSearch.prototype.animateLine = function (path) {
   }.bind(this);
   step(path, 0);
 };
-GraphSearch.prototype.drawLine = function (b1, b2) {
+
+/**
+ * Draws a line between the centers of two provided boxes
+ * @param {Box} b1
+ * @param {Box} b2
+ */
+GraphCanvas.prototype.drawLine = function (b1, b2) {
   var b1Center = b1.center(),
     b2Center = b2.center();
   var ctx = this.ctx;
@@ -131,7 +188,11 @@ GraphSearch.prototype.drawLine = function (b1, b2) {
   ctx.lineWidth = 1;
   ctx.stroke();
 };
-GraphSearch.prototype.drawGrid = function () {
+
+/**
+ * Helper method to draw a grid on the canvas showing all the boxes
+ */
+GraphCanvas.prototype.drawGrid = function () {
   var ctx = this.ctx;
   var i;
   for (i = 1; i < this.gridSize; i++) {
@@ -150,28 +211,58 @@ GraphSearch.prototype.drawGrid = function () {
   }
 };
 
+/**
+ * Represents a Box
+ * @constructor
+ * @param {number} x - x-coordinate of the box canvas left
+ * @param {number} y - y-coordinate of box from canvas top
+ * @param {number} size - Size of the box (side of square)
+ */
 function Box(x, y, size) {
   this.x = x;
   this.y = y;
   this.size = size;
 }
+
+/**
+ * Finds the center of the box
+ */
 Box.prototype.center = function () {
   return {
     x: Math.floor(this.x + (this.size / 2)),
     y: Math.floor(this.y + (this.size / 2))
   };
 };
+
+/**
+ * Whether the box contains a point whose coordinates are given
+ * @param {number} x - x-coordinate of point
+ * @param {number} y - y-coordinate of point
+ */
 Box.prototype.contains = function (x, y) {
   return this.x < x && this.y < y &&
       (this.x + this.size) >= x && (this.y + this.size) >= y;
 };
+
+/**
+ * String representation of Box
+ */
 Box.prototype.toString = function () {
   return '[' + this.x + ',' + this.y + ']';
 };
+
+/**
+ * Whether this box is equal to another box
+ * @param {Box} box - The box to compare this box with
+ */
 Box.prototype.equals = function (box) {
   return box && this.x === box.x && this.y === box.y;
 };
 
+/**
+ * Helper function runtime validations and coding sanity
+ * @param {truthy|falsy} condition - To Throw Or Not To Throw
+ */
 function assert(condition) {
   if (!condition) {
     console.log.apply(console, [].slice.call(arguments, 1));
