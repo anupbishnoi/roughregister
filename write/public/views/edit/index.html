@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Editing</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/bootstrap-markdown.min.css">
+    <link rel="stylesheet" href="../css/humane-libnotify.css">
+    <style>
+      body { opacity: 0; }
+      #writebox {
+        font-size: 16px !important;
+      }
+      .md-editor.md-fullscreen-mode .md-control-fullscreen,
+      .md-editor.md-fullscreen-mode .exit-fullscreen {
+        display: none;
+      }
+      .md-editor.md-fullscreen-mode {
+        padding-left: 0;
+        padding-right: 0;
+      }
+      #version-hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <form>
+      <textarea id="writebox" rows="30"
+          columns="30"><%= md %></textarea>
+    </form>
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap-markdown.js"></script>
+    <script src="../js/jquery.hotkeys.js"></script>
+    <script src="../js/humane.js"></script>
+    <script src="../js/io.js"></script>
+    
+    <script>
+      window.apperMountPath = '<%= mountPath %>';
+      window.savedVersion = '<%= version %>';
+    </script>
+    
+    <script src="../views/edit/index.js"></script>
+  </body>
+</html>

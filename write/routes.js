@@ -28,8 +28,10 @@ module.exports = function (app) {
       marked(val, function (err, html) {
         if (err) return res.end(err.stack);
         // app.log('html', html);
-        res.render('view.html', {
-          html: html
+        var comments = [];
+        res.render('view/index.html', {
+          html: html,
+          comments: comments
         });
       });
     });
@@ -49,7 +51,7 @@ module.exports = function (app) {
       // app.log('edit md', md);
       var version = hash(md);
       app.log('sending version', version);
-      res.render('edit.html', {
+      res.render('edit/index.html', {
         md: md,
         version: version
       });
