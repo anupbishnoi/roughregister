@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "body-parser": "^1.9.1",
+    "diff": "^1.2.2",
     "dirty": "^0.9.9",
     "ejs": "^1.0.0",
     "marked": "^0.3.2",
