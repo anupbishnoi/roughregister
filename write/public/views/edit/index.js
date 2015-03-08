@@ -49,12 +49,14 @@ var app = {};
     app.socket.emit('save', {
       topic: topicName,
       patch: patch
+    }, function () {
+      humane.log('Saved');
+      if (newContent !== content) app.editor.setContent(newContent);
+      app.data.savedContent = newContent;
+      app.data.patches = [];
+      app.el.updateBtn.removeClass('wr-btn-highlight');
     });
-    if (newContent !== content) app.editor.setContent(newContent);
-    app.data.savedContent = newContent;
     
-    app.data.patches = [];
-    app.el.updateBtn.removeClass('wr-btn-highlight');
     return false;
   }
   
