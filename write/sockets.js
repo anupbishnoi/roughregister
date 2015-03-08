@@ -22,14 +22,12 @@ function onSave(s) {
     find(topic, function (err, md) {
       if (err) return s.emit('save-error', err.message);
       
-      if (typeof md !== 'string')
-        return s.emit('save-error', 'Bad value in db, refresh');
       var content = diff.applyPatch(md, patch);
-      if (!content) {
+      if (content === false) {
         app.log('Could not save file', md, '\n', 'with patch', patch);
         return s.emit('save-error', 'Could not save');
       }
-      db.set(topic, content, function (err) {
+      db.set(topic, String(content), function (err) {
         if (err) return s.emit('save-error', 'Error saving to db');
         acknowledge();
         s.broadcast.to(topic).emit('update', patch);
