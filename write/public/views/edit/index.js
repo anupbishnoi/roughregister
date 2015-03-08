@@ -46,7 +46,6 @@ var app = {};
     }
     
     var patch = app.diff.createPatch(topicName, patchedContent || savedContent, newContent);
-    console.log(patch);
     app.socket.emit('save', {
       topic: topicName,
       patch: patch

@@ -5,7 +5,7 @@ var marked = require('marked'),
 var find = require('./db').find;
 
 module.exports = function (app) {
-  app.get('/:name/', function (req, res, next) {
+  app.get('/:name/', function (req, res) {
     var url = parseUrl(req.originalUrl);
     if (!/\/$/.test(url.pathname)) {
       var newUrl = url.pathname + '/' +
@@ -15,7 +15,6 @@ module.exports = function (app) {
       return res.redirect(newUrl);
     }
     var name = req.params.name;
-    if ((/^_/).test(name)) return next();
     app.log('view', name);
     find(name, function (err, val) {
       if (err) return res.end(err.stack);
