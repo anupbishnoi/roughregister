@@ -14,7 +14,7 @@ module.exports = function (app) {
 
 function onSave(s) {
   var app = this;
-  s.on('save', function (opts, acknowledge) {
+  s.on('save', function (opts) {
     app.log('save', opts.topic);
     var topic = opts.topic,
       patch = opts.patch;
@@ -22,16 +22,12 @@ function onSave(s) {
     find(topic, function (err, md) {
       if (err) return s.emit('save-error', err.message);
       
-      if (typeof md !== 'string')
-        return s.emit('save-error', 'Bad value in db, refresh');
       var content = diff.applyPatch(md, patch);
       if (!content) {
         app.log('Could not save file', md, '\n', 'with patch', patch);
-        return s.emit('save-error', 'Could not save');
+        s.emit('save-error', 'Could not save');
       }
-      db.set(topic, content, function (err) {
-        if (err) return s.emit('save-error', 'Error saving to db');
-        acknowledge();
+      db.set(topic, content, function () {
         s.broadcast.to(topic).emit('update', patch);
       });
     });
