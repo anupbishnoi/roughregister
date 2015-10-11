@@ -18,7 +18,7 @@
   },
   "scripts": {
     "prepublish": "npm prune",
-    "preinstall": "node bin/nestedinstall",
+    "preinstall": "npm install npm && node bin/nestedinstall",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "DEBUG=apper:* node server.js"
   },
