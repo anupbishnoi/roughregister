@@ -16,11 +16,5 @@
   ],
   "author": "Anup Bishnoi",
   "license": "MIT",
-  "dependencies": {
-    "underscore": "~1.4.4",
-    "formidable": "~1.0.13",
-    "express": "*",
-    "jade": "~0.30.0",
-    "pdfkit": "~0.1.9"
-  }
+  "dependencies": {}
 }

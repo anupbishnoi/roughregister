@@ -1,9 +1,0 @@
-{
-  "name": "drona-game",
-  "version": "0.0.1",
-  "description": "game with AR Dronne",
-  "dependencies": {
-    "underscore": "*",
-    "body-parser": "*"
-  }
-}

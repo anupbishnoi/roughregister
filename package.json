@@ -9,16 +9,18 @@
   "dependencies": {
     "apper": "*",
     "humanize": "0.0.9",
-    "npm": "^2.1.5",
-    "shelljs": "^0.3.0"
+    "underscore": "~1.4.4",
+    "formidable": "~1.0.13",
+    "jade": "~0.30.0",
+    "pdfkit": "~0.1.9"
   },
+  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git://github.com/asyncanup/roughregister"
   },
   "scripts": {
     "prepublish": "npm prune",
-    "preinstall": "npm install npm && node bin/nestedinstall",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "DEBUG=apper:* node roughregister.js"
   },
