@@ -10,7 +10,8 @@ var http = require("http"),
 var seating = require("./pdf/seating"),
     parseFields = require("./helpers").parseFields;
 
-var log = function () {};
+// var log = function () {};
+var log = console.log.bind(console);
 
 module.exports = function (app) {
     var mountPath = app.mountPath;
@@ -41,19 +42,29 @@ module.exports = function (app) {
                     seating.generate(
                         log,
                         files.seatids.path,
-                        __dirname + "/public/archive",
+                        "/tmp",
                         seatingPlan,
                         settings,
                         function (err, filenames) {
                             if (err) {
-                                res.end(JSON.stringify({
+                                return res.end(JSON.stringify({
                                     error: err.message
                                 }));
-                            } else {
-                                res.end(JSON.stringify(filenames));
                             }
+                            saveToS3(filenames.plan_pdf, function (err, s3_plan_pdf) {
+                                if (err) return res.end(JSON.stringify({ error: err.message }));
+                                saveToS3(filenames.stickers_pdf, function(err, s3_stickers_pdf) {
+                                    if (err) return res.end(JSON.stringify({ error: err.message }));
+                                    log("response", s3_plan_pdf, s3_stickers_pdf);
+                                    res.end(JSON.stringify({
+                                        plan_pdf: s3_plan_pdf,
+                                        stickers_pdf: s3_stickers_pdf
+                                    }));
+                               });
+                            });
                         },
-                        mountPath
+                        "",
+                        "tmp"
                     );
                 } else {
                     log(errors);
@@ -65,3 +76,19 @@ module.exports = function (app) {
         });
     });
 };
+
+var S3 = require("aws-sdk/clients/s3");
+function saveToS3(filename, callback) {
+    var s3 = new S3();
+    log("saveToS3", filename);
+    s3.putObject({
+        Bucket: "roughregister-pdf-store",
+        Key: filename,
+        Body: fs.createReadStream("/tmp/" + filename),
+        ACL: "public-read"
+    }, function(err, data) {
+        if (err) return callback(err);
+        log("Successfully uploaded " + filename + " to s3");
+        callback(null, "https://s3.amazonaws.com/roughregister-pdf-store/" + filename);
+    });
+}

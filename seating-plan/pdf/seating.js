@@ -17,18 +17,20 @@ By Anup Bishnoi (anupbishnoi@gmail.com)
 
     getInput = require("./helpers").getInput;
 
-    exports.generate = function(logger, seatids_input, output_folder, seating_plan, settings, callback, mountPathPublic) {
-        var add_buffer_seatids, center, plan, plan_path, sanitizeInput, stickers, stickers_path;
+    exports.generate = function(logger, seatids_input, output_folder, seating_plan, settings, callback, mountPathPublic, splitOnPath) {
+        var add_buffer_seatids, center, plan, plan_path, sanitizeInput, stickers, stickers_path, split_path;
         if (typeof logger === 'function') {
             log = logger;
         }
         mountPathPublic = mountPathPublic || "";
+        splitOnPath = splitOnPath || "public";
         log("Seat IDs input file: " + seatids_input);
         log("Seating Plan: " + (JSON.stringify(seating_plan)));
         log("Graphic Settings: " + (JSON.stringify(settings)));
         center = seating_plan.center.trim().replace(/\s+/g, "_");
         plan_path = "" + output_folder + "/SeatingPlan_" + seating_plan.studying_in + "_" + center + ".pdf";
         stickers_path = "" + output_folder + "/Stickers_" + seating_plan.studying_in + "_" + center + ".pdf";
+        split_path = "/" + splitOnPath + "/";
         log("Output files: " + plan_path + " and " + stickers_path);
         plan = new PDFDocument({
             margin: 0,
@@ -146,9 +148,11 @@ By Anup Bishnoi (anupbishnoi@gmail.com)
                             return stickers.write(stickers_path, function() {
                                 var filenames;
                                 log("" + stickers_path + " saved.");
+                                var publicPlanPath = plan_path.split(split_path)[1];
+                                var publicStickersPath = stickers_path.split(split_path)[1];
                                 filenames = {
-                                    plan_pdf: mountPathPublic + "/" + (plan_path.split("/public/")[1]),
-                                    stickers_pdf: mountPathPublic + "/" + (stickers_path.split("/public/")[1])
+                                    plan_pdf: mountPathPublic + (publicPlanPath || plan_path),
+                                    stickers_pdf: mountPathPublic + (publicStickersPath || stickers_path)
                                 };
                                 return callback(void 0, filenames);
                             });

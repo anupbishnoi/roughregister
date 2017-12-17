@@ -3,7 +3,7 @@ $(document).ready ()->
   $("#seating_plan").submit ->
     $("#waiting").fadeIn "slow"
     connection_failed = setTimeout ->
-      $("#error_message").html "Connection seems to have failed.<br/>Try again, or call Anup Bishnoi (9868768262)."
+      $("#error_message").html "Connection seems to have failed.<br/>Try again, or email pixelsallover@gmail.com."
       $("#waiting").fadeOut "slow"
       $("#error").dialog "open"
     ,

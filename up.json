@@ -1,8 +1,21 @@
 {
   "regions": ["us-east-1"],
+  "lambda": {
+    "role": "arn:aws:iam::646976889818:role/roughregister-seating-plan-role"
+  },
   "stages": {
     "development": {
-      "domain": "roughregister.com"
+      "domain": "dev.roughregister.com"
+    },
+    "production": {
+      "domain": "www.roughregister.com"
+    }
+  },
+  "dns": {
+    "roughregister.com": {
+      "name": "roughregister.com",
+      "type": "CNAME",
+      "value": ["www.roughregister.com"]
     }
   }
 }
