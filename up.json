@@ -1,5 +1,4 @@
 {
-  "profile": "roughregister_aws_profile",
   "regions": ["us-east-1"],
   "stages": {
     "development": {
